@@ -86,7 +86,10 @@ def build_model():
     ])
 
     parameters = {
-        'clf__estimator__n_neighbors': [2, 5],
+        'tfidf__norm': ('l1', 'l2'),
+        'tfidf__smooth_idf': (True, False),
+        'tfidf__sublinear_tf': (True, False),
+        'clf__estimator__n_neighbors': [2, 5, 8],
         'clf__estimator__weights': ('uniform', 'distance')
     }
 
