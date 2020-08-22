@@ -19,6 +19,10 @@ def load_data(messages_filepath, categories_filepath):
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
 
+    # drop duplicates
+    messages = messages.drop_duplicates('id')
+    categories = categories.drop_duplicates('id')
+
     # merge DataFrames on 'id' column
     df = messages.merge(categories, left_on='id', right_on='id', how='right')
 
