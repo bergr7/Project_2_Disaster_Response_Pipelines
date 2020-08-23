@@ -67,7 +67,10 @@ def clean_data(df):
     df = pd.concat([df, categories], axis=1)
 
     # drop duplicates
-    df_cleaned = df.drop_duplicates('id', keep='first')
+    df = df.drop_duplicates('id', keep='first')
+
+    # drop instances with 2's in related category
+    df_cleaned = df[df['related'] != 2]
 
     return df_cleaned
 
