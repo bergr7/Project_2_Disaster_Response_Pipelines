@@ -17,7 +17,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.multioutput import MultiOutputClassifier
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report
 from sklearn.model_selection import GridSearchCV
 
@@ -82,15 +82,17 @@ def build_model():
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
-        ('clf', MultiOutputClassifier(KNeighborsClassifier(), n_jobs=-1))
+        ('clf', MultiOutputClassifier(DecisionTreeClassifier(random_state=42, class_weight='balanced', n_jobs=-1)))
     ])
 
     parameters = {
         'tfidf__norm': ('l1', 'l2'),
         'tfidf__smooth_idf': (True, False),
         'tfidf__sublinear_tf': (True, False),
-        'clf__estimator__n_neighbors': [2, 5, 8],
-        'clf__estimator__weights': ('uniform', 'distance')
+        'clf__estimator__criterion': ('gini', 'entropy'),
+        'clf__estimator__splitter': ('best', 'random'),
+        'clf__estimator__max_depth': [5, 7, 10],
+        'clf__estimator__max_leaf_nodes': [1, 3, 5]
     }
 
     cv = GridSearchCV(pipeline, param_grid=parameters)
